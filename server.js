@@ -64,6 +64,10 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Victor chatbot draait op http://localhost:${port}`);
-});
+if (require.main === module) {
+  app.listen(port, () => {
+    console.log(`Victor chatbot draait op http://localhost:${port}`);
+  });
+}
+
+module.exports = app;
