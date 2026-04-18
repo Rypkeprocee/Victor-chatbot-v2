@@ -60,7 +60,7 @@ app.post('/api/chat', async (req, res) => {
     res.json({ reply: text });
   } catch (err) {
     console.error('Anthropic API fout:', err.message);
-    res.status(500).json({ error: 'Er ging iets mis. Probeer het opnieuw.' });
+    res.status(500).json({ error: err.message });
   }
 });
 
