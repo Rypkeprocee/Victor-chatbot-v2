@@ -38,6 +38,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.post('/api/chat', async (req, res) => {
+  console.log('API KEY aanwezig:', !!process.env.ANTHROPIC_API_KEY);
   const { messages, isFirstResponse } = req.body;
 
   if (!messages || !Array.isArray(messages)) {
