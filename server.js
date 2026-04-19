@@ -16,6 +16,7 @@ GEDRAGSREGELS:
 - Je gebruikt concrete voorbeelden uit de installatietechniek
 - Je verwijst naar NEN 3140 en NEN 3840 waar relevant
 - Je kunt berekeningen stap voor stap tonen
+- Gebruik geen markdown, geen bullet points, geen vet gedrukte tekst — gewone lopende tekst
 
 BEGINNIVEAU:
 De cursist heeft aan het begin van het gesprek zijn niveau aangegeven:
@@ -38,18 +39,23 @@ const NIVEAU_LABELS = {
   3: 'Niveau 3 – heeft certificaten NEN 3140/3840',
 };
 
-app.use(express.json());
+app.use(express.json({ limit: '20kb' }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use((req, res, next) => {
+  res.setHeader('Content-Security-Policy', "frame-ancestors *");
+  next();
+});
 
 app.post('/api/chat', async (req, res) => {
   const { messages, niveau } = req.body;
 
   if (!messages || !Array.isArray(messages)) {
-    return res.status(400).json({ error: 'messages array is vereist' });
+    return res.status(400).json({ error: 'Ongeldig verzoek.' });
   }
 
-  const niveauLabel = NIVEAU_LABELS[niveau] || NIVEAU_LABELS[1];
-  const systemPrompt = SYSTEM_PROMPT_TEMPLATE.replace('{{NIVEAU}}', niveauLabel);
+  const validNiveau = [1, 2, 3].includes(niveau) ? niveau : 1;
+  const systemPrompt = SYSTEM_PROMPT_TEMPLATE.replace('{{NIVEAU}}', NIVEAU_LABELS[validNiveau]);
   const history = messages.slice(-6);
 
   try {
@@ -65,7 +71,7 @@ app.post('/api/chat', async (req, res) => {
     res.json({ reply: text, isFallback });
   } catch (err) {
     console.error('Anthropic API fout:', err.message);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: 'Er ging iets mis. Probeer het opnieuw.' });
   }
 });
 
