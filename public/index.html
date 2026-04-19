@@ -551,7 +551,8 @@
       if (data.reply) {
         addMessage('assistant', data.reply);
         history.push({ role: 'assistant', content: data.reply });
-        if (!data.isFallback) showClarityButtons();
+        const isQuestion = data.reply.trimEnd().endsWith('?');
+        if (!data.isFallback && !isQuestion) showClarityButtons();
       } else {
         addMessage('assistant', data.error || 'Er ging iets mis. Probeer het opnieuw.');
       }
