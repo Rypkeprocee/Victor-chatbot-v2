@@ -32,7 +32,8 @@
       background: #ffffff;
       border-radius: 12px;
       overflow: hidden;
-      box-shadow: none;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
       display: flex;
       flex-direction: column;
       transition: height 0.3s ease;
@@ -40,7 +41,7 @@
     }
 
     #app.expanded {
-      height: 580px;
+      height: 620px;
     }
 
     /* ── Header ── */
@@ -430,7 +431,7 @@
     appEl.classList.add('expanded');
     if (!welcomeShown) {
       welcomeShown = true;
-      addMessage('assistant', 'Hallo, ik ben Victor: online docent elektrotechniek bij Veritech. Ik kan je helpen met vragen over de lesstof, berekeningen voor je uitvoeren of dingen uitleggen.');
+      addMessage('assistant', 'Hallo, ik ben Victor: online docent elektrotechniek bij Veritech. Ik kan je helpen met vragen over de lesstof, berekeningen voor je uitvoeren of dingen uitleggen.\n\nIk wil eerst van je weten hoe ver je bent gevorderd in de elektrotechniek.');
     }
   }
 
